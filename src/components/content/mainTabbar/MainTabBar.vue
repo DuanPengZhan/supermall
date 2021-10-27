@@ -1,7 +1,7 @@
 <template>
   <tab-bar>
     <tab-bar-item path="/home">
-      <template #item-icon>
+      <template v-slot:item-icon>
         <img src="@/assets/img/tabbar/home.svg" alt="" />
       </template>
       <template #item-icon-active>
