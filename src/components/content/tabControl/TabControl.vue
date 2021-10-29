@@ -49,6 +49,7 @@ export default {
 }
 .tab-control-item {
   flex: 1;
+  /* background-color: #f6f6f6; */
 }
 
 .tab-control-item span {

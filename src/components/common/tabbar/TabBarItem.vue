@@ -51,6 +51,7 @@ export default {
   text-align: center;
   height: 49px;
   font-size: 14px;
+  overflow: hidden;
 }
 
 .tab-bar-item img {
