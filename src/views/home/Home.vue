@@ -6,8 +6,14 @@
       </template>
     </nav-bar>
 
-    <scroll class="content" ref="scroll">
-      
+    <scroll
+      class="content"
+      ref="scroll"
+      :probeType="3"
+      :pullUpLoad="true"
+      @scroll="contentScroll"
+      @pullingUp="loadMore"
+    >
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
@@ -17,12 +23,10 @@
         @tabClick="tabClick"
       ></tab-control>
       <goods-list :goods="showGoods"></goods-list>
-      
     </scroll>
 
     <!-- vcli4中   click加不加.native  组件点击事件都会发生  -->
-      <back-top @click="backClick"></back-top>
-
+    <back-top @click="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -48,7 +52,7 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    BackTop
+    BackTop,
   },
   data() {
     return {
@@ -56,11 +60,12 @@ export default {
       recommends: [],
       titles: ["流行", "新款", "精选"],
       goods: {
-        'pop': { page: 0, list: [] },
-        'new': { page: 0, list: [] },
-        'sell': { page: 0, list: [] },
+        pop: { page: 0, list: [] },
+        new: { page: 0, list: [] },
+        sell: { page: 0, list: [] },
       },
       currentType: "pop",
+      isShowBackTop: false,
     };
   },
   computed: {
@@ -86,9 +91,21 @@ export default {
       console.log(index);
     },
 
-    backClick(){
-      this.$refs.scroll.scrollTo(0,0,500);
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0, 500);
       console.log("返回");
+    },
+    // 监听内容滚动距离
+    contentScroll(position) {
+      this.isShowBackTop = position.y < -1000;
+      // console.log(position);
+    },
+    // 监听滚动内容
+    loadMore() {
+      this.getHomeGoods(this.currentType);
+      this.$refs.scroll.finishPullUp();
+      // this.$refs.scroll.refresh(); //可以不使用
+      console.log("上拉加载更多");
     },
 
     /*
@@ -104,7 +121,7 @@ export default {
     },
     getHomeGoods(type) {
       // type是变量  所以需要使用[]获取
-      const page = this.goods[type].page + 1;
+      const page = this.goods[type].page + 1; //获取第一页
       getHomeGoods(type, page).then((res) => {
         // console.log(res);
         this.goods[type].list.push(...res.data.list);
@@ -133,7 +150,7 @@ export default {
 }
 
 /* 第一种 */
-.content{
+.content {
   height: calc(100vh - 93px);
   /* overflow: hidden;  */
 }
