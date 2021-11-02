@@ -5,6 +5,13 @@
         <div>购物街</div>
       </template>
     </nav-bar>
+     <tab-control
+        :titles="titles"
+        @tabClick="tabClick"
+        ref="tabControl1"
+        v-show="isTabFixed"
+        class="tab-control"
+      ></tab-control>
 
     <scroll
       class="content"
@@ -14,13 +21,17 @@
       @scroll="contentScroll"
       @pullingUp="loadMore"
     >
-      <home-swiper :banners="banners"></home-swiper>
+      <home-swiper
+        :banners="banners"
+        @swiperImageLoad="swiperImageLoad"
+      ></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
       <tab-control
-        class="tab-control"
         :titles="titles"
         @tabClick="tabClick"
+        ref="tabControl2"
+        v-show="!isTabFixed"
       ></tab-control>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
@@ -41,6 +52,7 @@ import Scroll from "@/components/common/scroll/Scroll";
 import BackTop from "@/components/common/backTop/BackTop";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home";
+import { debounce } from "@/common/utils/";
 
 export default {
   name: "Home",
@@ -66,6 +78,8 @@ export default {
       },
       currentType: "pop",
       isShowBackTop: false,
+      tabOffsetTop: 0,
+      isTabFixed: false,
     };
   },
   computed: {
@@ -81,6 +95,15 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
   },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh, 200);
+    refresh();
+
+    // 获取tabControl的offsetTop
+    // 所有组件都有一个属性$el:用于获取组件中的元素
+    // console.log(this.$refs.TabControl.$el.offsetTop);
+  },
+  updated() {},
   methods: {
     /*
     事件监听相关方法
@@ -88,6 +111,11 @@ export default {
     tabClick(index) {
       // this.currentType = (index = 0 ) ? 'pop' : (index == 1) ? 'new' : 'sell';
       this.currentType = index == 0 ? "pop" : index == 1 ? "new" : "sell";
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
+      this.$refs.scroll.scrollTo(0,675,1000)
+      console.log(this.tabOffsetTop);
+      
       console.log(index);
     },
 
@@ -97,15 +125,25 @@ export default {
     },
     // 监听内容滚动距离
     contentScroll(position) {
+      // 1.判断BackTop是否显示
       this.isShowBackTop = position.y < -1000;
       // console.log(position);
+
+      // 2.决定tabControl是否吸顶(position: fixed)
+      this.isTabFixed = -position.y + 44  > this.tabOffsetTop;
     },
     // 监听滚动内容
     loadMore() {
       this.getHomeGoods(this.currentType);
-      this.$refs.scroll.finishPullUp();
+
       // this.$refs.scroll.refresh(); //可以不使用
       console.log("上拉加载更多");
+    },
+
+    // 判断轮播图加载完之后 测算offsetTop的高度
+    swiperImageLoad() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
+      console.log(this.$refs.tabControl2.$el.offsetTop);
     },
 
     /*
@@ -127,6 +165,9 @@ export default {
         this.goods[type].list.push(...res.data.list);
         // 第二个page+1是我们保存的数据，我们保存了多少个page,此时才更新我们的this.goods[type].page
         this.goods[type].page += 1;
+
+        // 完成上拉加载更多
+        this.$refs.scroll.finishPullUp();
       });
     },
   },
@@ -135,24 +176,25 @@ export default {
 
 <style scoped>
 #home {
-  padding-top: 44px;
+  /* padding-top: 44px; */
+  /* position: relative; */
   height: 100vh;
 }
 .home-nav {
   background-color: var(--color-tint);
   color: #ffffff;
 
-  position: fixed;
+  /* position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 9;
+  z-index: 9; */
 }
 
 /* 第一种 */
 .content {
   height: calc(100vh - 93px);
-  /* overflow: hidden;  */
+  overflow: hidden; 
 }
 /* 第二种 */
 /* .content{
@@ -160,15 +202,14 @@ export default {
 
   position: absolute;
   top: 44px;
-  bottom: 49px;
+  bottom: 49px; 
   left: 0;
   right: 0;
 } */
 
-.tab-control {
-  position: sticky;
-  top: 44px;
-  background-color: #ffffff;
+.tab-control{
+  position: relative;
   z-index: 9;
 }
+
 </style>
