@@ -109,14 +109,14 @@ export default {
   updated() {},
   activated() {
     this.$refs.scroll.refresh();
-    this.$refs.scroll.scrollTo(0, this.saveY, 200);
+    this.$refs.scroll.scrollTo(0, this.saveY, 0);
     
-    console.log(this.saveY);
+    console.log("activated:--------------------------"+this.saveY);
     console.log("activated");
   },
   deactivated() {
     this.saveY = this.$refs.scroll.getScrollY();
-    console.log(this.saveY);
+    console.log("deactivated:--------------------------"+this.saveY);
     console.log("deactivated");
   },
   unmounted() {
