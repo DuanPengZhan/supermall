@@ -39,6 +39,14 @@ const routes = [{
       keepAlive: true,  // 设置页面是否需要使用缓存
     },
     component: () => import('../views/profile/Profile.vue'),
+  },
+  {
+    path: '/detail/:iid',
+    name: 'Detail',
+    meta: {
+      keepAlive: true,  // 设置页面是否需要使用缓存
+    },
+    component: () => import('../views/detail/Detail.vue'),
   }
 ]
 
