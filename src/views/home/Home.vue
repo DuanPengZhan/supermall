@@ -5,13 +5,13 @@
         <div>购物街</div>
       </template>
     </nav-bar>
-     <tab-control
-        :titles="titles"
-        @tabClick="tabClick"
-        ref="tabControl1"
-        v-show="isTabFixed"
-        class="tab-control"
-      ></tab-control>
+    <tab-control
+      :titles="titles"
+      @tabClick="tabClick"
+      ref="tabControl1"
+      v-show="isTabFixed"
+      class="tab-control"
+    ></tab-control>
 
     <scroll
       class="content"
@@ -20,6 +20,7 @@
       :pullUpLoad="true"
       @scroll="contentScroll"
       @pullingUp="loadMore"
+      keepAlive="true"
     >
       <home-swiper
         :banners="banners"
@@ -80,6 +81,7 @@ export default {
       isShowBackTop: false,
       tabOffsetTop: 0,
       isTabFixed: false,
+      saveY: 0,
     };
   },
   computed: {
@@ -96,6 +98,7 @@ export default {
     this.getHomeGoods("sell");
   },
   mounted() {
+    // 防抖
     const refresh = debounce(this.$refs.scroll.refresh, 200);
     refresh();
 
@@ -104,6 +107,21 @@ export default {
     // console.log(this.$refs.TabControl.$el.offsetTop);
   },
   updated() {},
+  activated() {
+    this.$refs.scroll.refresh();
+    this.$refs.scroll.scrollTo(0, this.saveY, 200);
+    
+    console.log(this.saveY);
+    console.log("activated");
+  },
+  deactivated() {
+    this.saveY = this.$refs.scroll.getScrollY();
+    console.log(this.saveY);
+    console.log("deactivated");
+  },
+  unmounted() {
+    console.log("Home页面销毁");
+  },
   methods: {
     /*
     事件监听相关方法
@@ -113,9 +131,9 @@ export default {
       this.currentType = index == 0 ? "pop" : index == 1 ? "new" : "sell";
       this.$refs.tabControl1.currentIndex = index;
       this.$refs.tabControl2.currentIndex = index;
-      this.$refs.scroll.scrollTo(0,675,1000)
+      this.$refs.scroll.scrollTo(0, -this.tabOffsetTop + 44, 1000);
       console.log(this.tabOffsetTop);
-      
+
       console.log(index);
     },
 
@@ -130,11 +148,13 @@ export default {
       // console.log(position);
 
       // 2.决定tabControl是否吸顶(position: fixed)
-      this.isTabFixed = -position.y + 44  > this.tabOffsetTop;
+      this.isTabFixed = -position.y + 44 > this.tabOffsetTop;
     },
     // 监听滚动内容
     loadMore() {
       this.getHomeGoods(this.currentType);
+      // 完成上拉加载更多
+      this.$refs.scroll.finishPullUp();
 
       // this.$refs.scroll.refresh(); //可以不使用
       console.log("上拉加载更多");
@@ -162,12 +182,9 @@ export default {
       const page = this.goods[type].page + 1; //获取第一页
       getHomeGoods(type, page).then((res) => {
         // console.log(res);
-        this.goods[type].list.push(...res.data.list);
+        res.data.list && this.goods[type].list.push(...res.data.list);
         // 第二个page+1是我们保存的数据，我们保存了多少个page,此时才更新我们的this.goods[type].page
         this.goods[type].page += 1;
-
-        // 完成上拉加载更多
-        this.$refs.scroll.finishPullUp();
       });
     },
   },
@@ -194,7 +211,7 @@ export default {
 /* 第一种 */
 .content {
   height: calc(100vh - 93px);
-  overflow: hidden; 
+  overflow: hidden;
 }
 /* 第二种 */
 /* .content{
@@ -207,9 +224,8 @@ export default {
   right: 0;
 } */
 
-.tab-control{
+/* .tab-control {
   position: relative;
   z-index: 9;
-}
-
+} */
 </style>

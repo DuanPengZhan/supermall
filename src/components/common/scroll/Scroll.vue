@@ -31,7 +31,7 @@ export default {
         observeImage: true,
         click: true,
         probeType: this.probeType,
-        mouseWheel: true,
+        // mouseWheel: true,
 
         //   触发上拉事件的阈值
         pullUpLoad: this.pullUpLoad,
@@ -71,6 +71,9 @@ export default {
       console.log("--------------");
       this.scroll && this.scroll.refresh();
       //   console.log("重新计算高度");
+    },
+    getScrollY() {
+      return this.scroll ? this.scroll.y : 0;
     },
   },
 };
