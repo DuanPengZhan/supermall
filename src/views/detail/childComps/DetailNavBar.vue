@@ -65,6 +65,6 @@ export default {
 }
 
 .back img {
-    margin-top: 12px;
+    margin-top: 10px;
 }
 </style>

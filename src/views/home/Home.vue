@@ -109,7 +109,7 @@ export default {
   updated() {},
   activated() {
     this.$refs.scroll.refresh();
-    this.$refs.scroll.scrollTo(0, this.saveY, 0);
+    this.$refs.scroll.scrollTo(0, this.saveY, 1);
     
     console.log("activated:--------------------------"+this.saveY);
     console.log("activated");
