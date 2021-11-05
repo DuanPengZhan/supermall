@@ -48,7 +48,7 @@ export default {
   border-bottom: 3px solid #f2f5f8;
 }
 
-.info-titles {
+.info-title {
   color: #222;
 }
 .info-price {

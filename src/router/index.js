@@ -13,6 +13,7 @@ const routes = [{
     name: 'Home',
     meta: {
       keepAlive: true,  // 设置页面是否需要使用缓存
+      footShow: true,
     },
     component: () => import('../views/home/Home.vue'),
   },
@@ -21,6 +22,7 @@ const routes = [{
     name: 'Cart',
     meta: {
       keepAlive: true,  // 设置页面是否需要使用缓存
+      footShow: true,
     },
     component: () => import('../views/cart/Cart.vue'),
   },
@@ -29,6 +31,7 @@ const routes = [{
     name: 'Category',
     meta: {
       keepAlive: true,  // 设置页面是否需要使用缓存
+      footShow: true,
     },
     component: () => import('../views/category/Category.vue'),
   },
@@ -37,6 +40,7 @@ const routes = [{
     name: 'Profile',
     meta: {
       keepAlive: true,  // 设置页面是否需要使用缓存
+      footShow: true,
     },
     component: () => import('../views/profile/Profile.vue'),
   },

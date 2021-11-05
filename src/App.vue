@@ -1,13 +1,14 @@
 <template>
   <div>
     <div id="app">
-      <main-tab-bar></main-tab-bar>
+      
       <router-view v-slot="{ Component }">
         <keep-alive include="Home,Cart,Category,Profile">
           <component :is="Component" v-if="$route.meta.keepAlive" :key="$route.path"></component>
         </keep-alive>
       </router-view>
       <!-- <router-view></router-view> -->
+      <main-tab-bar v-if="$route.meta.footShow"></main-tab-bar>
     </div>
   </div>
 </template>
