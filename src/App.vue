@@ -1,7 +1,6 @@
 <template>
   <div>
     <div id="app">
-      
       <router-view v-slot="{ Component }">
         <keep-alive include="Home,Cart,Category,Profile">
           <component :is="Component" v-if="$route.meta.keepAlive" :key="$route.path"></component>

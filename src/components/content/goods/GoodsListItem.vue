@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="goodsItem.show.img" alt="" />
+    <img :src="showImage" alt="" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -18,6 +18,14 @@ export default {
       default() {
         return {};
       },
+    },
+  },
+  computed: {
+    // 直接当做普通属性调用不加括号
+    // 任何data中数据变化立即重新计算
+    // 计算属性会缓存
+    showImage() {
+      return this.goodsItem.image  || this.goodsItem.show.img
     },
   },
   methods: {

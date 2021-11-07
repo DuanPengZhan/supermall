@@ -8,7 +8,7 @@
         <div class="info-key">{{detailInfo.detailImage[0].key}}</div>
         <div class="info-list">
             <!--  @load='imgLoad'  不太需要 -->
-            <img v-for="(item,index) in detailInfo.detailImage[0].list" :key="index" :src="item" alt="">
+            <img v-for="(item,index) in detailInfo.detailImage[0].list" :key="index" :src="item" @load='imgLoad' alt="">
         </div>
     </div>
 </template>
@@ -26,24 +26,24 @@
         },
         data() {
             return {
-                // counter: 0,
-                // imagesLength: 0
+                counter: 0,
+                imagesLength: 0
             }
         },
-        // methods: {
-        //     imgLoad(){
-        //         // 判断所有的图片都加载完了，进行一次回调即可
-        //         if ( ++this.counter === this.imagesLength) {
-        //             this.$emit("imageLoad")
-        //             // console.log("DetailGoodsInfo  图片加载完成");
-        //         }
-        //     }
-        // },
-        // watch:{
-        //     detailInfo(){
-        //         this.imagesLength = this.detailInfo.detailImage[0].list.length
-        //     }
-        // }
+        methods: {
+            imgLoad(){
+                // 判断所有的图片都加载完了，进行一次回调即可
+                if ( ++this.counter === this.imagesLength) {
+                    this.$emit("imageLoad")
+                    // console.log("DetailGoodsInfo  图片加载完成");
+                }
+            }
+        },
+        watch:{
+            detailInfo(){
+                this.imagesLength = this.detailInfo.detailImage[0].list.length
+            }
+        }
 
 
     }

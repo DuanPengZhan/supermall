@@ -39,7 +39,8 @@ export default {
   methods: {
     titleClick(index) {
       this.currentIndex = index;
-      console.log(index);
+      this.$emit('tabClick',index)
+      // console.log(index);
     },
     backClick(){
         this.$router.back()
