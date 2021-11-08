@@ -83,9 +83,9 @@ export default {
       titleTopY: [],
       currentIndex: 0,
 
-      paramOffsetTop: 0,
+      paramsOffsetTop: 0,
       commentOffsetTop: 0,
-      recommendOffsetTop: 0,
+      recommendsOffsetTop: 0,
     };
   },
   created() {
@@ -132,20 +132,6 @@ export default {
       this.recommends = res.data.list;
       console.log(res);
     });
-
-    this.getThemeTopy = debounce(() => {
-      this.$nextTick(() => {
-        // 获取不同组件的offsetTop
-        // -44 是因为detailNavBar top  44px
-        this.titleTopY = [];
-        this.titleTopY.push(0);
-        this.titleTopY.push(this.$refs.params.$el.offsetTop - 44);
-        this.titleTopY.push(this.$refs.comment.$el.offsetTop - 44 || this.$refs.recommends.$el.offsetTop - 44);
-        this.titleTopY.push(this.$refs.recommends.$el.offsetTop - 44);
-        this.titleTopY.push(Number.MAX_VALUE);
-        console.log(this.titleTopY);
-      });
-    }, 100);
   },
   updated() {},
   mounted() {
@@ -160,13 +146,45 @@ export default {
     imageLoad() {
       this.$refs.scroll.refresh();
       //图片加载获取offsettop
+      // this.getThemeTopy();
+
+      this.getThemeTopy = debounce(() => {
+        this.$nextTick(() => {
+          // 获取不同组件的offsetTop
+          this.paramsOffsetTop = this.$refs.params.$el.offsetTop;
+          this.commentOffsetTop = this.$refs.comment.$el.offsetTop;
+          this.recommendsOffsetTop = this.$refs.recommends.$el.offsetTop;
+          console.log(this.paramsOffsetTop);
+          console.log(this.commentOffsetTop);
+          console.log(this.recommendsOffsetTop);
+          console.log("DetailGoodsInfo  图片加载完成");
+        });
+      }, 100);
+
       this.getThemeTopy();
     },
 
     // 通过index 跳转到对应index的内容
     // 点击导航栏跳转页面
     titleClick(index) {
-      this.$refs.scroll.scrollTo(0, -this.titleTopY[index], 100);
+      switch (index) {
+        case 0:
+          this.$refs.scroll.scrollTo(0, 0, 100);
+          break;
+        case 1:
+          this.$refs.scroll.scrollTo(0, -this.paramsOffsetTop + 44, 100);
+          break;
+        case 2:
+          this.$refs.scroll.scrollTo(0, -this.commentOffsetTop + 44, 100);
+          break;
+        case 3:
+          this.$refs.scroll.scrollTo(0, -this.recommendsOffsetTop + 44, 100);
+          break;
+        default:
+          break;
+      }
+      console.log(index);
+      // this.$refs.scroll.scrollTo(0, -this.titleTopY[index], 100);
     },
 
     // 监听内容滚动
@@ -174,20 +192,25 @@ export default {
     contentScroll(position) {
       this.isShowBackTop = position.y < -1000;
       // console.log(position.y);
-      const positionY = -position.y;
-      let length = this.titleTopY.length
+      // if判断中  不能使用 -this.paramOffsetTop + 44 < position.y < 0  双判断形式  否则无法正确使用if
+      // if (this.currentIndex)  防止currentIndex没有值导致报错
+      // 这种方法有bug  未解决
+      
+      const positionY = -position.y
 
-      for (let i = 0; i < length - 1; i++) {
-        if (
-          this.currentIndex !== i &&
-          positionY >= this.titleTopY[i] &&
-          positionY < this.titleTopY[i + 1]
-        ) {
-          this.currentIndex = i;
-          console.log(this.currentIndex);
-          this.$refs.detailNavBar.currentIndex = this.currentIndex;
+      if (this.$refs.detailNavBar.currentIndex) {
+        if ( 0 <= positionY && positionY < this.paramsOffsetTop - 44) {
+          this.$refs.detailNavBar.currentIndex = 0;
+        } else if (this.commentOffsetTop - 44 > positionY && positionY >= this.paramsOffsetTop - 44) {
+          this.$refs.detailNavBar.currentIndex = 1;
+        } else if (this.recommendsOffsetTop - 44 > positionY && positionY >= -this.commentOffsetTop - 44) {
+          this.$refs.detailNavBar.currentIndex = 2;
+        } else if( positionY >= this.recommendsOffsetTop - 44 ){
+          this.$refs.detailNavBar.currentIndex = 3;
         }
+      // this.$refs.detailNavBar.currentIndex = this.currentIndex;
       }
+
     },
 
     // 返回顶部按钮

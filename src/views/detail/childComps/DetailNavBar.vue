@@ -39,7 +39,7 @@ export default {
   methods: {
     titleClick(index) {
       this.currentIndex = index;
-      this.$emit('tabClick',index)
+      this.$emit('titleClick',index)
       // console.log(index);
     },
     backClick(){
