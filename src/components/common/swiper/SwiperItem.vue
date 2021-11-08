@@ -1,4 +1,5 @@
 <template>
+<!-- slide 滑动 -->
   <div class="slide">
     <slot></slot>
   </div>

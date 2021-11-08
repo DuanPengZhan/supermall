@@ -49,6 +49,7 @@ const routes = [{
     name: 'Detail',
     meta: {
       keepAlive: true,  // 设置页面是否需要使用缓存
+      // footShow: true,
     },
     component: () => import('../views/detail/Detail.vue'),
   }

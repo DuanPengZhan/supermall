@@ -28,6 +28,7 @@
       <goods-list :goods="recommends" ref="recommends"></goods-list>
     </scroll>
     <back-top @click="backClick" v-show="isShowBackTop"></back-top>
+    <detail-bottom-bar></detail-bottom-bar>
   </div>
 </template>
 
@@ -44,8 +45,10 @@ import DetailSwiper from "./childComps/DetailSwiper";
 import DetailBaseInfo from "./childComps/DetailBaseInfo";
 import DetailShopInfo from "./childComps/DetailShopInfo";
 import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
-import DetailParamInfo from "./childComps/DetailParamInfo.vue";
-import DetailCommentInfo from "./childComps/DetailCommentInfo.vue";
+import DetailParamInfo from "./childComps/DetailParamInfo";
+import DetailCommentInfo from "./childComps/DetailCommentInfo";
+import DetailBottomBar from "./childComps/DetailBottomBar";
+
 import GoodsList from "@/components/content/goods/GoodsList";
 import BackTop from "@/components/common/backTop/BackTop";
 import { debounce } from "@/common/utils/";
@@ -65,6 +68,7 @@ export default {
     DetailCommentInfo,
     GoodsList,
     BackTop,
+    DetailBottomBar,
   },
   data() {
     return {
@@ -140,7 +144,10 @@ export default {
         this.titleTopY = [];
         this.titleTopY.push(0);
         this.titleTopY.push(this.$refs.params.$el.offsetTop - 44);
-        this.titleTopY.push(this.$refs.comment.$el.offsetTop - 44 || this.$refs.recommends.$el.offsetTop - 44);
+        this.titleTopY.push(
+          this.$refs.comment.$el.offsetTop - 44 ||
+            this.$refs.recommends.$el.offsetTop - 44
+        );
         this.titleTopY.push(this.$refs.recommends.$el.offsetTop - 44);
         this.titleTopY.push(Number.MAX_VALUE);
         console.log(this.titleTopY);
@@ -175,7 +182,7 @@ export default {
       this.isShowBackTop = position.y < -1000;
       // console.log(position.y);
       const positionY = -position.y;
-      let length = this.titleTopY.length
+      let length = this.titleTopY.length;
 
       for (let i = 0; i < length - 1; i++) {
         if (
@@ -212,7 +219,12 @@ export default {
 }
 
 .content {
-  height: calc(100vh - 93px);
+  /* 44px  为detailNavBar高度    49px  为detailBottomBar高度 */
+  /* width: calc(100% - 30px - 10%);
+     height: calc(100% - 20px - 12%);
+     padding: 20px 10% 12% 30px;  上 右 下 左 
+  */
+  height: calc(100vh - 44px - 49px);
   overflow: hidden;
 }
 </style>
