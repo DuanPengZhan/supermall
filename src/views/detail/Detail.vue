@@ -6,6 +6,12 @@
       ref="detailNavBar"
     ></detail-nav-bar>
     <scroll class="content" ref="scroll" @scroll="contentScroll" :probeType="3">
+      <!-- 购物车添加演示  -->
+      <!-- <ul>
+        <li v-for="(item,index) in $store.state.cartList" :key="index">
+          {{item}}
+        </li>
+      </ul> -->
       <detail-swiper
         :topImages="topImages"
         @swiperImageLoad="swiperImageLoad"
@@ -28,7 +34,7 @@
       <goods-list :goods="recommends" ref="recommends"></goods-list>
     </scroll>
     <back-top @click="backClick" v-show="isShowBackTop"></back-top>
-    <detail-bottom-bar></detail-bottom-bar>
+    <detail-bottom-bar @addCart="addToCart"></detail-bottom-bar>
   </div>
 </template>
 
@@ -153,9 +159,12 @@ export default {
         console.log(this.titleTopY);
       });
     }, 100);
+
+    // 4.
   },
   updated() {},
   mounted() {
+    // 总线  带带
     let newRefresh = debounce(this.$refs.scroll.refresh, 100);
     newRefresh();
   },
@@ -166,7 +175,7 @@ export default {
 
     imageLoad() {
       this.$refs.scroll.refresh();
-      //图片加载获取offsettop
+      //图片加载完成  获取offsettop
       this.getThemeTopy();
     },
 
@@ -202,12 +211,27 @@ export default {
       this.$refs.scroll.scrollTo(0, 0, 500);
       // console.log("点击了");
     },
+
+    // 添加购物车
+    addToCart() {
+      // 1.获取购物车需要展示的信息
+      const product = {};
+      product.image = this.topImages.image;
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+
+      // 2.将商品添加到购物车当中
+      // this.$store.commit("addCart",product);
+      this.$store.dispatch("addCart", product);
+    },
   },
   updated() {
     this.$refs.scroll.refresh();
   },
 };
-</script>
+</script> 
 
 <style scoped>
 #detail {
