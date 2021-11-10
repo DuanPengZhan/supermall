@@ -58,6 +58,7 @@ import DetailBottomBar from "./childComps/DetailBottomBar";
 import GoodsList from "@/components/content/goods/GoodsList";
 import BackTop from "@/components/common/backTop/BackTop";
 import { debounce } from "@/common/utils/";
+import emitter from "@/common/eventbus.js";
 
 import Scroll from "@/components/common/scroll/Scroll";
 
@@ -135,14 +136,16 @@ export default {
         this.commentInfo = this.data.rate.list[0];
         // console.log(this.commentInfo);
       }
+      console.log(res);
     });
 
     // 3.请求详情推荐数据
     getRecommend().then((res) => {
       this.recommends = res.data.list;
-      console.log(res);
+      // console.log(res);
     });
 
+    // 4.给getThemeTopy赋值  (对给this.titleTopY赋值的操作进行防抖)
     this.getThemeTopy = debounce(() => {
       this.$nextTick(() => {
         // 获取不同组件的offsetTop
@@ -164,9 +167,12 @@ export default {
   },
   updated() {},
   mounted() {
-    // 总线  带带
+    // Vue3中  总线废除  改为使用 mitt  第三方库
     let newRefresh = debounce(this.$refs.scroll.refresh, 100);
-    newRefresh();
+    emitter.on("imageLoad", () => {
+      console.log("emitter---------------------");
+      newRefresh();
+    });
   },
   methods: {
     swiperImageLoad() {
@@ -201,7 +207,8 @@ export default {
         ) {
           this.currentIndex = i;
           console.log(this.currentIndex);
-          this.$refs.detailNavBar.currentIndex = this.currentIndex;
+          this.currentIndex &&
+            (this.$refs.detailNavBar.currentIndex = this.currentIndex);
         }
       }
     },
@@ -216,7 +223,7 @@ export default {
     addToCart() {
       // 1.获取购物车需要展示的信息
       const product = {};
-      product.image = this.topImages.image;
+      product.image = this.topImages[0];
       product.title = this.goods.title;
       product.desc = this.goods.desc;
       product.price = this.goods.realPrice;
