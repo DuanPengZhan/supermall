@@ -37,6 +37,9 @@ export default {
       },
     },
   },
+  data() {
+    return {};
+  },
 };
 </script>
 
@@ -57,7 +60,6 @@ export default {
 .info-price .n-price {
   font-size: 24px;
   color: var(--color-high-text);
-  
 }
 .info-price .o-price {
   font-size: 13px;

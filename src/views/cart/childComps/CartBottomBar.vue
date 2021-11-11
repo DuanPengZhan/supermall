@@ -72,13 +72,13 @@ export default {
   },
   methods: {
     checkclick() {
-      console.log(this.isSelectAll);
+      // console.log(this.isSelectAll);
       // forEach() 数组每个元素都执行一次回调函数
       if (this.isSelectAll) { // 全部选中时  this.isSelectAll为true   点击后则变为false  所以取反
-        console.log("this.isSelectAll----------" + this.isSelectAll);
+        // console.log("this.isSelectAll----------" + this.isSelectAll);
         return this.cartList.forEach((item) => (item.checked = false));
       } else { //部分 或全部不选中
-        console.log("this.isSelectAll+++++++++++" + this.isSelectAll);
+        // console.log("this.isSelectAll+++++++++++" + this.isSelectAll);
         return this.cartList.forEach((item) => (item.checked = true));
       }
 

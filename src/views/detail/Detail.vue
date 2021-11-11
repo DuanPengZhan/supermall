@@ -35,6 +35,8 @@
     </scroll>
     <back-top @click="backClick" v-show="isShowBackTop"></back-top>
     <detail-bottom-bar @addCart="addToCart"></detail-bottom-bar>
+
+    <!-- <toast :message="msg"></toast> -->
   </div>
 </template>
 
@@ -61,6 +63,9 @@ import { debounce } from "@/common/utils/";
 import emitter from "@/common/eventbus.js";
 
 import Scroll from "@/components/common/scroll/Scroll";
+// import Toast from '@/components/common/toast/Toast'
+
+import { mapActions } from "vuex";
 
 export default {
   name: "Detail",
@@ -76,6 +81,7 @@ export default {
     GoodsList,
     BackTop,
     DetailBottomBar,
+    // Toast
   },
   data() {
     return {
@@ -93,10 +99,6 @@ export default {
       getThemeTopy: null,
       titleTopY: [],
       currentIndex: 0,
-
-      paramOffsetTop: 0,
-      commentOffsetTop: 0,
-      recommendOffsetTop: 0,
     };
   },
   created() {
@@ -175,6 +177,7 @@ export default {
     });
   },
   methods: {
+    ...mapActions(["addCart"]),
     swiperImageLoad() {
       console.log("swiperImageLoad  图片加载完成");
     },
@@ -229,9 +232,18 @@ export default {
       product.price = this.goods.realPrice;
       product.iid = this.iid;
 
-      // 2.将商品添加到购物车当中
+      // 2.将商品添加到购物车当中 (1.promise  2.mapActions)
       // this.$store.commit("addCart",product);
-      this.$store.dispatch("addCart", product);
+      // this.$store.dispatch("addCart", product).then(res=>{
+      //   console.log(res);
+      // })
+
+      // mapActions写法
+      this.addCart(product).then((res) => {
+        // console.log(res);
+
+        this.toastWrapper(res, 1000);
+      });
     },
   },
   updated() {
