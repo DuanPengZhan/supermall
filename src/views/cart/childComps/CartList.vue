@@ -10,13 +10,15 @@
 import Scroll from "@/components/common/scroll/Scroll";
 import CartListItem from './CartListItem'
 
+
 import { mapGetters } from "vuex";
 
 export default {
   name: "cartList",
   components: {
     Scroll,
-    CartListItem
+    CartListItem,
+    
   },
   computed: {
     ...mapGetters(["cartList"]),
@@ -29,10 +31,10 @@ export default {
 
 <style scoped>
 .cart-list {
-  height: 100vh;
+    height: calc(100vh - 44px - 49px - 40px);
 }
 .content {
-  height: calc(100vh - 44px - 49px);
+  height: 100%;
   overflow: hidden;
 }
 </style>

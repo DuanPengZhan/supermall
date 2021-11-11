@@ -1,5 +1,5 @@
 <template>
-  <div class="checkbutton" :class="{ active: isChecked }">
+  <div class="checkbutton"  :class="{ checked: isChecked }">
     <img src="@/assets/img/cart/tick.svg" alt="" />
   </div>
 </template>
@@ -10,7 +10,7 @@ export default {
   props: {
     isChecked: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
 };
@@ -22,7 +22,7 @@ export default {
   border-radius: 50%;
   border: solid 1px #aaa;
 }
-.active {
+.checked {
   border-color: #ff5777;
   border-radius: 50%;
   background-color: #ff5777;

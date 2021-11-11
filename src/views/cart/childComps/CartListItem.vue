@@ -1,7 +1,10 @@
 <template>
   <div class="shop-item">
     <div class="item-selector">
-        <CheckButton></CheckButton>
+      <CheckButton
+        :isChecked="itemInfo.checked"
+        @click="checkClick"
+      ></CheckButton>
     </div>
 
     <div class="item-img">
@@ -20,8 +23,7 @@
 </template>
 
 <script>
-
-import CheckButton from '@/components/content/checkButton/CheckButton'
+import CheckButton from "@/components/content/checkButton/CheckButton";
 
 export default {
   name: "CartListItem",
@@ -34,8 +36,13 @@ export default {
     },
   },
   components: {
-      CheckButton
-  }
+    CheckButton,
+  },
+  methods: {
+    checkClick() {
+      this.itemInfo.checked = !this.itemInfo.checked;
+    },
+  },
 };
 </script>
 
@@ -61,7 +68,7 @@ export default {
   text-overflow: ellipsis;
 }
 
-.item-img img{
+.item-img img {
   width: 80px;
   height: 100px;
   display: block;
