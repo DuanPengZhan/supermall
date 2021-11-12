@@ -34,6 +34,7 @@
       <goods-list :goods="recommends" ref="recommends"></goods-list>
     </scroll>
     <back-top @click="backClick" v-show="isShowBackTop"></back-top>
+    <to-cart @click="toCart"></to-cart>
     <detail-bottom-bar @addCart="addToCart"></detail-bottom-bar>
 
     <!-- <toast :message="msg"></toast> -->
@@ -59,6 +60,7 @@ import DetailBottomBar from "./childComps/DetailBottomBar";
 
 import GoodsList from "@/components/content/goods/GoodsList";
 import BackTop from "@/components/common/backTop/BackTop";
+import ToCart from "@/components/common/tocart/ToCart";
 import { debounce } from "@/common/utils/";
 import emitter from "@/common/eventbus.js";
 
@@ -81,6 +83,7 @@ export default {
     GoodsList,
     BackTop,
     DetailBottomBar,
+    ToCart,
     // Toast
   },
   data() {
@@ -222,6 +225,11 @@ export default {
       // console.log("点击了");
     },
 
+    // 跳转购物车页面
+    toCart() {
+      this.$router.push("/cart/");
+    },
+
     // 添加购物车
     addToCart() {
       // 1.获取购物车需要展示的信息
@@ -242,7 +250,7 @@ export default {
       this.addCart(product).then((res) => {
         // console.log(res);
 
-        this.toastWrapper(res, 1000);
+        this.$toast.show(res, 1000);
       });
     },
   },

@@ -2,6 +2,11 @@
   <div class="cart">
     <!-- 导航栏 -->
     <nav-bar class="cart-nav">
+      <template #left>
+        <div class="back" @click="backClick">
+          <img src="@/assets/img/common/back.svg" alt="" />
+        </div>
+      </template>
       <template #center>
         <div>购物车({{ length }})</div>
       </template>
@@ -42,6 +47,11 @@ export default {
       // list: "cartList"
     }),
   },
+  methods: {
+    backClick() {
+      this.$router.go(-1);
+    },
+  },
 };
 </script>
 
@@ -49,5 +59,8 @@ export default {
 .cart-nav {
   background-color: var(--color-tint);
   color: #ffffff;
+}
+.back img {
+  margin-top: 10px;
 }
 </style>

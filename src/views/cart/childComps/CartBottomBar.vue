@@ -10,7 +10,7 @@
     </div>
 
     <div class="count">合计￥:{{ totalPrice }}</div>
-    <div class="calc">去计算：{{ checkLength }}</div>
+    <div class="calc" @click="calcClick">去计算：{{ checkLength }}</div>
   </div>
 </template>
 
@@ -74,16 +74,27 @@ export default {
     checkclick() {
       // console.log(this.isSelectAll);
       // forEach() 数组每个元素都执行一次回调函数
-      if (this.isSelectAll) { // 全部选中时  this.isSelectAll为true   点击后则变为false  所以取反
+      if (this.isSelectAll) {
+        // 全部选中时  this.isSelectAll为true   点击后则变为false  所以取反
         // console.log("this.isSelectAll----------" + this.isSelectAll);
         return this.cartList.forEach((item) => (item.checked = false));
-      } else { //部分 或全部不选中
+      } else {
+        //部分 或全部不选中
         // console.log("this.isSelectAll+++++++++++" + this.isSelectAll);
         return this.cartList.forEach((item) => (item.checked = true));
       }
 
       // 有bug
       //   this.cartList.forEach((item) => item.checked === !this.isSelectAll);
+    },
+
+    calcClick() {
+      console.log("---------");
+      if (this.checkLength === 0) {
+        this.$toast.show("您还没有选择商品哦", 1000);
+      }else {
+        // 跳转到结算页面
+      }
     },
   },
 };

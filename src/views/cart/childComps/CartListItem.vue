@@ -16,7 +16,11 @@
       <div class="item-desc">{{ itemInfo.desc }}</div>
       <div class="info-bottom">
         <div class="item-price left">￥{{ itemInfo.price }}</div>
-        <div class="item-price right">x{{ itemInfo.count }}</div>
+        <div class="item-price right">
+          <span class="sub" @click="sub">-</span>
+          <span class="count"> {{ itemInfo.count }}</span>
+          <span class="add" @click="add">+</span>
+        </div>
       </div>
     </div>
   </div>
@@ -41,6 +45,17 @@ export default {
   methods: {
     checkClick() {
       this.itemInfo.checked = !this.itemInfo.checked;
+    },
+    sub() {
+      if (this.itemInfo.count === 1) {
+        this.itemInfo.count = 1
+        this.$toast.show("最少购买一件哦",1000)
+      } else {
+        this.itemInfo.count--;
+      }
+    },
+    add() {
+      this.itemInfo.count++;
     },
   },
 };
@@ -99,5 +114,20 @@ export default {
 
 .info-bottom .item-price {
   color: orangered;
+}
+
+.info-bottom .item-price span {
+  border: 1px solid #eee;
+  padding: 7px 15px;
+}
+
+.info-bottom .item-price .sub {
+  border-top-left-radius: 25%;
+  border-bottom-left-radius: 25%;
+}
+
+.info-bottom .item-price .add {
+  border-top-right-radius: 25%;
+  border-bottom-right-radius: 25%;
 }
 </style>
