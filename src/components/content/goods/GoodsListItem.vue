@@ -25,7 +25,8 @@ export default {
     // 任何data中数据变化立即重新计算
     // 计算属性会缓存
     showImage() {
-      return this.goodsItem.image  || this.goodsItem.show.img
+      //this.goodsItem.img
+      return  this.goodsItem.image ? this.goodsItem.image : this.goodsItem.img ? this.goodsItem.img :  this.goodsItem.show.img 
     },
   },
   methods: {

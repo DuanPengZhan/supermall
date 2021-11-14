@@ -7,7 +7,6 @@
         </div>
         <div class="info-key">{{detailInfo.detailImage[0].key}}</div>
         <div class="info-list">
-            <!--  @load='imgLoad'  不太需要 -->
             <img v-for="(item,index) in detailInfo.detailImage[0].list" :key="index" :src="item" @load='imgLoad' alt="">
         </div>
     </div>

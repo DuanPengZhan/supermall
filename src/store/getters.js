@@ -4,5 +4,9 @@ export default {
     },
     cartList(state){
         return state.cartList
-    }
+    },
+    // tabClickIndex(state){
+    //     return state.tabClickIndex
+    // }
+    
 }

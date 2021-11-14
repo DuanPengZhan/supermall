@@ -8,7 +8,7 @@ import getters  from './getters'
 
 
 const state = {
-  cartList: []
+  cartList: [],
 }
 
 export default createStore({

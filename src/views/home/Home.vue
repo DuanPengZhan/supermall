@@ -5,12 +5,12 @@
         <div>购物街</div>
       </template>
     </nav-bar>
+
     <tab-control
       :titles="titles"
       @tabClick="tabClick"
       ref="tabControl1"
       v-show="isTabFixed"
-      class="tab-control"
     ></tab-control>
 
     <scroll

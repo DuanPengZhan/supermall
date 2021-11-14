@@ -22,8 +22,11 @@ export default {
 };
 </script>
 
-<style>
+<style >
 @import url("./assets/css/base.css");
 /* @import url('@/assets/css/base.css'); 会报错找不到模块 */
 /* @import '@/assets/css/base.css';  vcli4不支持*/
 </style>
+
+
+

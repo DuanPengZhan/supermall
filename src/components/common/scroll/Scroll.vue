@@ -7,6 +7,11 @@
 </template>
 
 <script>
+// 默认情况下 BScroll 是不可以实时的监听滚动位置
+// prode 侦测
+// 1：非实时（屏幕滑动超过一定时间后）派发scroll 事件；
+// 2：在屏幕滑动的过程中实时派发 scroll 事件；
+// 3：不仅在屏幕滑动的过程中，而且在滚动动画运行过程中实时派发 scroll 事件。
 import BScroll from "better-scroll";
 
 export default {

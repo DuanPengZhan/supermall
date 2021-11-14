@@ -1,146 +1,211 @@
 <template>
-  <div class="wrapper" ref="wrapper">
-    <ul class="content">
-      <li>列表1</li>
-      <li>列表2</li>
-      <li>列表3</li>
-      <li>列表4</li>
-      <li>列表5</li>
-      <li>列表6</li>
-      <li>列表7</li>
-      <li>列表8</li>
-      <li>列表9</li>
-      <li>列表10</li>
-      <li>列表11</li>
-      <li>列表12</li>
-      <li>列表13</li>
-      <li>列表14</li>
-      <li>列表15</li>
-      <li>列表16</li>
-      <li>列表17</li>
-      <li>列表18</li>
-      <li>列表19</li>
-      <li>列表20</li>
-      <li>列表21</li>
-      <li>列表22</li>
-      <li>列表23</li>
-      <li>列表24</li>
-      <li>列表25</li>
-      <li>列表26</li>
-      <li>列表27</li>
-      <li>列表28</li>
-      <li>列表29</li>
-      <li>列表30</li>
-      <li>列表31</li>
-      <li>列表32</li>
-      <li>列表33</li>
-      <li>列表34</li>
-      <li>列表35</li>
-      <li>列表36</li>
-      <li>列表37</li>
-      <li>列表38</li>
-      <li>列表39</li>
-      <li>列表40</li>
-      <li>列表41</li>
-      <li>列表42</li>
-      <li>列表43</li>
-      <li>列表44</li>
-      <li>列表45</li>
-      <li>列表46</li>
-      <li>列表47</li>
-      <li>列表48</li>
-      <li>列表49</li>
-      <li>列表50</li>
-      <li>列表51</li>
-      <li>列表52</li>
-      <li>列表53</li>
-      <li>列表54</li>
-      <li>列表55</li>
-      <li>列表56</li>
-      <li>列表57</li>
-      <li>列表58</li>
-      <li>列表59</li>
-      <li>列表60</li>
-      <li>列表61</li>
-      <li>列表62</li>
-      <li>列表63</li>
-      <li>列表64</li>
-      <li>列表65</li>
-      <li>列表66</li>
-      <li>列表67</li>
-      <li>列表68</li>
-      <li>列表69</li>
-      <li>列表70</li>
-      <li>列表71</li>
-      <li>列表72</li>
-      <li>列表73</li>
-      <li>列表74</li>
-      <li>列表75</li>
-      <li>列表76</li>
-      <li>列表77</li>
-      <li>列表78</li>
-      <li>列表79</li>
-      <li>列表80</li>
-      <li>列表81</li>
-      <li>列表82</li>
-      <li>列表83</li>
-      <li>列表84</li>
-      <li>列表85</li>
-      <li>列表86</li>
-      <li>列表87</li>
-      <li>列表88</li>
-      <li>列表89</li>
-      <li>列表90</li>
-      <li>列表91</li>
-      <li>列表92</li>
-      <li>列表93</li>
-      <li>列表94</li>
-      <li>列表95</li>
-      <li>列表96</li>
-      <li>列表97</li>
-      <li>列表98</li>
-      <li>列表99</li>
-      <li>列表100</li>
-    </ul>
+  <div class="category" ref="category">
+    <nav-bar class="category-nav">
+      <template #center>
+        <div>分类</div>
+      </template>
+    </nav-bar>
+
+    <category-left-nav
+      :leftNavList="leftNavList"
+      @itemCLick="itemCLick"
+    ></category-left-nav>
+
+    <div class="right">
+      <tab-control
+        :titles="titles"
+        @tabClick="tabClick"
+        ref="tabControl1"
+        v-show="isTabFixed"
+        class="tab-control1"
+      ></tab-control>
+      <scroll
+        class="content"
+        ref="scroll"
+        :probeType="3"
+        @scroll="contentScroll"
+      >
+        <!-- 右侧上部图片 -->
+        <category-right-img
+          :rightTopImgList="rightTopImgList"
+          @categoryImgLoad="categoryImgLoad"
+        ></category-right-img>
+        <!-- 右侧下半部商品列表 -->
+        <tab-control
+          :titles="titles"
+          @tabClick="tabClick"
+          ref="tabControl2"
+          v-show="!isTabFixed"
+        ></tab-control>
+        <goods-list :goods="shopList"></goods-list>
+      </scroll>
+    </div>
+
+    <!-- vcli4中   click加不加.native  组件点击事件都会发生  -->
+    <back-top @click="backClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
 <script>
-// 默认情况下 BScroll 是不可以实时的监听滚动位置
-// prode 侦测
-// 1：非实时（屏幕滑动超过一定时间后）派发scroll 事件；
-// 2：在屏幕滑动的过程中实时派发 scroll 事件；
-// 3：不仅在屏幕滑动的过程中，而且在滚动动画运行过程中实时派发 scroll 事件。
-import BScroll from "better-scroll";
+import NavBar from "@/components/common/navbar/NavBar";
+
+import CategoryLeftNav from "./childComps/CategoryLeftNav.vue";
+import CategoryRightImg from "./childComps/CategoryRightImg.vue";
+import TabControl from "@/components/content/tabControl/TabControl";
+import GoodsList from "@/components/content/goods/GoodsList";
+import BackTop from "@/components/common/backTop/BackTop";
+
+
+
+import Scroll from "@/components/common/scroll/Scroll";
+
+import {
+  getCategoryLeftNav,
+  getCategoryRightTopImg,
+  getCategoryRightBottomShopList,
+} from "@/network/category";
 
 export default {
   name: "Category",
+  components: {
+    NavBar,
+    Scroll,
+    CategoryLeftNav,
+    CategoryRightImg,
+    TabControl,
+    GoodsList,
+    BackTop,
+  },
   data() {
-    return {};
+    return {
+      leftNavList: [],
+      rightTopImgList: [],
+      maitKey: "3627",
+      miniWallkey: "10062603",
+      titles: ["流行", "新款", "精选"],
+      currentType: "pop",
+      shopList: [],
+      tabOffsetTop: 0,
+      isTabFixed: false,
+      isShowBackTop: false,
+    };
+  },
+  computed: {},
+  created() {
+    this.getCategoryLeftNav();
+    this.getCategoryRightTopImg(this.maitKey);
+    this.getCategoryRightBottomShopList(this.miniWallkey, "pop");
+    this.getCategoryRightBottomShopList(this.miniWallkey, "new");
+    this.getCategoryRightBottomShopList(this.miniWallkey, "sell");
+  },
+  updated() {
+    this.$refs.scroll.refresh();
   },
   // 组件创建完后调用
-  mounted() {
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapper, {
-        probeType: 3,
-        pullUpLoad: true,
-      });
-      this.scroll.on("scroll", (position) => {
-        console.log(position);
-      });
+  mounted() {},
+  methods: {
+    itemCLick(index) {
+      this.maitKey = this.leftNavList[index].maitKey;
+      this.miniWallkey = this.leftNavList[index].miniWallkey;
+      // console.log(index + " " + this.maitKey);
+      // this.getCategoryRightTopImg(this.maitKey);
+      this.$refs.scroll.scrollTo(0, 0, 500);
+      this.$refs.tabControl1.currentIndex = 0;
+      this.$refs.tabControl2.currentIndex = 0;
+    },
 
-      this.scroll.on("pullingUp", () => {
-        console.log("上拉加载更多");
+    tabClick(index) {
+      this.currentType = index == 0 ? "pop" : index == 1 ? "new" : "sell";
+      this.$refs.tabControl1.currentIndex = index;
+      this.$refs.tabControl2.currentIndex = index;
+      this.$refs.scroll.scrollTo(0, -this.tabOffsetTop + 44, 1000);
+      // console.log(this.miniWallkey + " ------------" + this.currentType);
+      this.getCategoryRightBottomShopList(this.miniWallkey, this.currentType);
+      // console.log("TabControl-----" + index);
+    },
+
+    // 右侧上半部图片加载完成
+    categoryImgLoad() {
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
+      console.log(this.tabOffsetTop);
+    },
+
+    // 监听内容滚动距离
+    contentScroll(position) {
+      // 1.判断BackTop是否显示
+      this.isShowBackTop = position.y < -1000;
+      // 决定tabControl是否吸顶(position: fixed)
+      // console.log(position.y);
+      this.isTabFixed = -position.y > this.tabOffsetTop ? true : false;
+    },
+
+    backClick() {
+      this.$refs.scroll.scrollTo(0, 0, 500);
+      console.log("返回");
+    },
+
+    // 请求数据
+    // 请求获取分类页面数据  左侧导航数据
+    getCategoryLeftNav() {
+      getCategoryLeftNav().then((res) => {
+        // console.log(res);
+        this.leftNavList = res.data.category.list;
+        // console.log(this.leftNavList);
       });
-    });
+    },
+
+    // 获取分类页面  右侧上半部图片
+    getCategoryRightTopImg(maitKey) {
+      // this.leftNavList[index].maitKey = maitKey
+      getCategoryRightTopImg(maitKey).then((res) => {
+        // console.log(maitKey);
+        // console.log(res);
+        this.rightTopImgList = res.data.list;
+        // console.log(this.rightTopImgList);
+        res;
+      });
+    },
+
+    // 获取分类页面  右侧下半部商品列表
+    getCategoryRightBottomShopList(miniWallkey, type) {
+      getCategoryRightBottomShopList(miniWallkey, type).then((res) => {
+        this.shopList = res;
+        // console.log(this.shopList);
+      });
+    },
+  },
+  //回调中移除监听
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
   },
 };
 </script>
 
 <style scoped>
-.wrapper {
-  height: 150px;
-  background-color: red;
+.category-nav {
+  background-color: var(--color-tint);
+  color: #ffffff;
+}
+
+.right {
+  width: 75%;
+  height: calc(100vh - 44px - 46px);
+  position: absolute;
+  top: 44px;
+  right: 0;
+  bottom: 49px;
+}
+.tab-control1 {
+  z-index: 999;
+}
+.content {
+  height: 100%;
   overflow: hidden;
+}
+
+.is_fixed {
+  position: fixed;
+  top: 0;
+  z-index: 999;
 }
 </style>
