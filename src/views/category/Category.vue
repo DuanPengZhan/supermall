@@ -110,8 +110,10 @@ export default {
       // console.log(index + " " + this.maitKey);
       // this.getCategoryRightTopImg(this.maitKey);
       this.$refs.scroll.scrollTo(0, 0, 500);
+      // 点击左边导航栏  右边tabControl的  currentIndex  初始化为0
       this.$refs.tabControl1.currentIndex = 0;
       this.$refs.tabControl2.currentIndex = 0;
+      // currentIndex  初始化为0 时请求对应的数据   让它及时刷新
       this.getCategoryRightBottomShopList(this.miniWallkey, this.currentType);
     },
 
