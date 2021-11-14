@@ -186,7 +186,7 @@ export default {
     },
 
     imageLoad() {
-      this.$refs.scroll.refresh();
+      // this.$refs.scroll.refresh();
       //图片加载完成  获取offsettop
       this.getThemeTopy();
     },
