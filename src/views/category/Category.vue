@@ -112,6 +112,7 @@ export default {
       this.$refs.scroll.scrollTo(0, 0, 500);
       this.$refs.tabControl1.currentIndex = 0;
       this.$refs.tabControl2.currentIndex = 0;
+      this.getCategoryRightBottomShopList(this.miniWallkey, this.currentType);
     },
 
     tabClick(index) {
