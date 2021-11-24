@@ -41,7 +41,6 @@ export default {
     itemCLick(index) {
       this.currentIndex = index;
       this.$emit("itemCLick", index);
-      //   console.log(index);
     },
   },
 };
@@ -75,7 +74,7 @@ export default {
 }
 
 .left-nav-list-item p {
-  height: 3rem;
+  height: 2.5rem;
   line-height: 3rem;
 }
 

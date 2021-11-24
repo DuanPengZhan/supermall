@@ -12,11 +12,6 @@
       </a>
       <p class="item-title">{{ item.title }}</p>
     </div>
-
-    <!-- 右侧下半部商品列表 -->
-    <!-- <div class="tabcontorl">
-      <tab-control :titles="titles" @tabClick="tabClick"></tab-control>
-    </div> -->
   </div>
 </template>
 
@@ -33,22 +28,24 @@ export default {
   },
   data() {
     return {
-      counter: 0,
-      imagesLength: 0,
+      // counter: 0,
+      // imagesLength: 0,
     };
   },
   methods: {
+    // 不可以使用  if   watch    会导致点击不同导航栏  tabOffsetTop不会重新计算
     categoryImgLoad() {
-      if (++this.counter === this.imagesLength) {
-        this.$emit("categoryImgLoad");
-      }
+      this.$emit("categoryImgLoad");
+      // if (++this.counter === this.imagesLength) {
+      //   this.$emit("categoryImgLoad");
+      // }
     },
   },
-  watch: {
-    rightTopImgList() {
-      this.imagesLength = this.rightTopImgList.length;
-    },
-  },
+  // watch: {
+  //   rightTopImgList() {
+  //     this.imagesLength = this.rightTopImgList.length;
+  //   },
+  // },
 };
 </script>
 

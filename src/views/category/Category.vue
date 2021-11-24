@@ -29,6 +29,7 @@
         <category-right-img
           :rightTopImgList="rightTopImgList"
           @categoryImgLoad="categoryImgLoad"
+          ref="categoryImg"
         ></category-right-img>
         <!-- 右侧下半部商品列表 -->
         <tab-control
@@ -38,6 +39,8 @@
           v-show="!isTabFixed"
         ></tab-control>
         <goods-list :goods="shopList"></goods-list>
+        <!-- 填充40px高度 -->
+        <div class="fill"></div>
       </scroll>
     </div>
 
@@ -55,9 +58,8 @@ import TabControl from "@/components/content/tabControl/TabControl";
 import GoodsList from "@/components/content/goods/GoodsList";
 import BackTop from "@/components/common/backTop/BackTop";
 
-
-
 import Scroll from "@/components/common/scroll/Scroll";
+import { debounce } from "@/common/utils";
 
 import {
   getCategoryLeftNav,
@@ -105,16 +107,23 @@ export default {
   mounted() {},
   methods: {
     itemCLick(index) {
+      // 点击不同导航栏  获取到对应的maitKey、miniWallkey
       this.maitKey = this.leftNavList[index].maitKey;
       this.miniWallkey = this.leftNavList[index].miniWallkey;
-      // console.log(index + " " + this.maitKey);
-      // this.getCategoryRightTopImg(this.maitKey);
-      this.$refs.scroll.scrollTo(0, 0, 500);
+      console.log(index + " " + this.maitKey);
+      // 点击左边导航栏  返回对应的数据
+      this.getCategoryRightTopImg(this.maitKey);
+      // currentIndex  初始化为0时请求对应的数据   让它及时刷新
+      this.getCategoryRightBottomShopList(this.miniWallkey, this.currentType);
       // 点击左边导航栏  右边tabControl的  currentIndex  初始化为0
       this.$refs.tabControl1.currentIndex = 0;
       this.$refs.tabControl2.currentIndex = 0;
-      // currentIndex  初始化为0 时请求对应的数据   让它及时刷新
-      this.getCategoryRightBottomShopList(this.miniWallkey, this.currentType);
+      // 每点击一次导航栏  tabOffsetTop 需要重新计算一次
+      // this.$refs.scroll.refresh();
+      // this.categoryImgLoad();
+
+      // 返回到顶部
+      this.$refs.scroll.scrollTo(0, 0, 500); 
     },
 
     tabClick(index) {
@@ -165,7 +174,6 @@ export default {
         // console.log(res);
         this.rightTopImgList = res.data.list;
         // console.log(this.rightTopImgList);
-        res;
       });
     },
 
@@ -192,17 +200,17 @@ export default {
 
 .right {
   width: 75%;
-  height: calc(100vh - 44px - 46px);
+  height: 100vh;
   position: absolute;
   top: 44px;
   right: 0;
   bottom: 49px;
 }
-.tab-control1 {
+/* .tab-control1 {
   z-index: 999;
-}
+} */
 .content {
-  height: 100%;
+  height: calc(100% - 44px - 46px);
   overflow: hidden;
 }
 
@@ -210,5 +218,9 @@ export default {
   position: fixed;
   top: 0;
   z-index: 999;
+}
+
+.fill {
+  height: 40px;
 }
 </style>

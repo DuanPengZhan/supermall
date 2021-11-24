@@ -73,7 +73,7 @@ export default {
     },
     refresh() {
       // 重新计算 BetterScroll ,当DOM结构发生变化的时候务必要调用确保滚动的效果正常
-      console.log("--------------");
+      // console.log("--------------");
       this.scroll && this.scroll.refresh();
       //   console.log("重新计算高度");
     },
